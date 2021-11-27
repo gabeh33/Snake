@@ -1,7 +1,5 @@
 # Snake game by Gabe Holmes
 # Just a fun 1 hour project, replicating the classic game of snake
-
-
 from graphics import *
 import random
 
