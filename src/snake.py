@@ -60,6 +60,7 @@ def chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots
     # If an apple was ate, dont pop the element only get the contents
     # since we keep that square as a snake square
     if ate_apple:
+        # Update the score since an apple was eaten
         text_string = text.getText()
         num = int(text_string[-1]) + 1
         return_string = text_string[:-1] + str(num)
