@@ -39,7 +39,7 @@ def draw_board(window, num_rows, num_cols, size_of_square, top_buffer, boarder_b
 
 
 # Removes the end of the snake and adds it to the front
-def chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots):
+def chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots, text):
     currRow, currCol = snake_list[-1]
     targetRow = currRow + direction[0]
     targetCol = currCol + direction[1]
@@ -60,6 +60,10 @@ def chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots
     # If an apple was ate, dont pop the element only get the contents
     # since we keep that square as a snake square
     if ate_apple:
+        text_string = text.getText()
+        num = int(text_string[-1]) + 1
+        return_string = text_string[:-1] + str(num)
+        text.setText(return_string)
         lastRow, lastCol = snake_list[0]
     else:
         lastRow, lastCol = snake_list.pop(0)
@@ -91,7 +95,8 @@ def chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots
 # info about each square
 # plays the game
 def play_game(win, squares, num_rows, num_cols):
-    text = Text(Point(win.getWidth() / 2, 10), 'Playing')
+    text = Text(Point(win.getWidth() / 2, 10), 'Welcome to Snake! Press any key to start playing')
+    text.setSize(15)
     text.setFill('white')
     text.draw(win)
     # Start the snake occupying squares (7,9) and (8,9)
@@ -115,21 +120,21 @@ def play_game(win, squares, num_rows, num_cols):
     apple_spots.remove((7, 6))
 
     loop_count = 0
-    win.getMouse()
+    win.getKey()
+    text.setText("Score: 0")
     direction = (0, 1)
     while True:
         keyStroke = win.checkKey()
-        text.setText(text.getText() + keyStroke)
         directions = {'d': (0, 1), 'Right': (0, 1), 'w': (-1, 0), 'Up': (-1, 0),
                       'a': (0, -1), 'Left': (0, -1), 's': (1, 0), 'Down': (1, 0)}
         if keyStroke in directions:
             direction = directions[keyStroke]
-            text.setText(str(direction))
 
         # Only move the snake every 10 loops, used to adjust tik rate
-        if loop_count % 2 == 0:
-            if chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots):
-                text.setText('Lost')
+        if loop_count % 700 == 0:
+            if chop_and_add(snake_list, squares, direction, num_rows, num_cols, apple_spots, text):
+                final_score = text.getText()[-1]
+                text.setText(F"Game Over! Your final is {final_score}")
                 break
         loop_count += 1
 
